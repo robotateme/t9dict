@@ -65,6 +65,6 @@ class DBWordsManager(Database):
     def search(self, word_part, code):
         self._db_cursor.row_factory = sqlite3.Row
         sql = 'SELECT word,code FROM words WHERE code >= ? LIMIT {limit}'.format(
-            limit=len(word_part) * 3
+            limit=10
         )
         return self.query(sql, (code,))

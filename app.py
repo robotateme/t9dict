@@ -1,7 +1,8 @@
 import sys
 from argparse import ArgumentParser
-from utils import T9Helper
+from utils import T9Helper, WordsHelper
 from db import DBWordsManager
+from collections import OrderedDict
 
 parser = ArgumentParser(description='Test task application')
 
@@ -20,6 +21,17 @@ if args.init is True:
         sys.exit('Exit init')
 
 if isinstance(args.word, str):
-    res = dbwm.search(args.word, T9Helper.word2t9(args.word, full=True)).fetchall()
-    for w in res:
+    result_rows = dbwm.search(args.word, T9Helper.word2t9(args.word, full=True)).fetchall()
+    result_words = []
+
+    for row in result_rows:
+        distance = WordsHelper.levenshtein(args.word, row['word'])
+        word_data = dict(word=row['word'], distance=distance)
+        result_words.append(word_data)
+
+        result_words = sorted(result_words, key=lambda k: k['distance'])
+    for w in result_words:
         print(w['word'])
+
+
+
