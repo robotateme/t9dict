@@ -1,5 +1,3 @@
-import re
-
 WORDS_PATH = '/usr/share/dict/words'
 TEST_PATH = 'storage/test'
 
